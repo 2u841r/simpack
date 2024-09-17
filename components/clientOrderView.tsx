@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import OrderForm from "./OrderForm.tsx"
+import OrderForm from "./orderForm"
 
 const ClientOrderView = ({ shop_name }) => {
   const [packages, setPackages] = useState([]);

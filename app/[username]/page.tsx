@@ -421,7 +421,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
-import Admin from "@/components/Admin.tsx";
+import Admin from "@/components/admin";
 import ClientOrderView from "@/components/clientOrderView";
 
 const ShopPage = async ({ params }) => {

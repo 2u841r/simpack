@@ -383,7 +383,7 @@
 // This is a server component
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import ClientSideDashboard from "@/components/ClientSideDashboard";
+// import ClientSideDashboard from "@/components/clientSideDashboard";
 import Link from "next/link";
 
 export default async function ProtectedPage() {

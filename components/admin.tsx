@@ -367,10 +367,10 @@ const Admin = ({ shop_name }) => {
                       </span>
                     ) : (
                       <button
-                        onClick={() => handleOrder(pkg.id)}
+                        // onClick={() => handleOrder(pkg.id)}
                         className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
                       >
-                        Order
+                        Order x
                       </button>
                     )}
                   </div>
