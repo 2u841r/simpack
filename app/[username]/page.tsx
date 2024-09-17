@@ -10,7 +10,7 @@
 //   const {
 //     data: { user },
 //   } = await supabase.auth.getUser();
-  
+
 //   if (!user) {
 //     return redirect("/sign-in");
 //   }
@@ -113,9 +113,9 @@
 //   return (
 //     <div>
 //       <h2 className="text-xl font-semibold mb-4">Available Packages</h2>
-//       <PackageList 
-//         packages={packages} 
-//         isCustomer={true} 
+//       <PackageList
+//         packages={packages}
+//         isCustomer={true}
 //         onSelectPackage={setSelectedPackage}
 //       />
 //       {selectedPackage && (
@@ -379,43 +379,88 @@
 //   );
 // }
 
+// // This is a server component
+// import { createClient } from "@/utils/supabase/server";
+// import { redirect } from "next/navigation";
+// import ClientSideDashboard from "@/components/ClientSideDashboard";
 
-// This is a server component
+// export default async function ProtectedPage() {
+//   const supabase = createClient();
+
+//   const { data: { user } } = await supabase.auth.getUser();
+
+//   if (!user) {
+//     console.log('test')
+//     return redirect("/sign-in");
+//   }
+
+//   const shopName = user.email.split('@')[0];
+
+//   // Check if shop exists, if not create one
+//   const { data: shop, error } = await supabase
+//     .from('shops')
+//     .select()
+//     .eq('name', shopName)
+//     .single();
+
+//   if (error) {
+//     // Shop doesn't exist, create one
+//     await supabase.from('shops').insert({ name: shopName });
+//   }
+
+//   return (
+//     <div className="flex-1 w-full flex flex-col gap-12">
+//       <div className="w-full">
+//         <h1 className="text-2xl font-bold mb-4">Welcome, {user.email}</h1>
+
+//         {/* <ClientSideDashboard shopName={shopName} userEmail={user.email} /> */}
+//       </div>
+//     </div>
+//   );
+// }
+
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import ClientSideDashboard from "@/components/ClientSideDashboard";
+import { notFound } from "next/navigation";
+import Admin from "@/components/Admin";
+import ClientOrderView from "@/components/clientOrderView";
 
-export default async function ProtectedPage() {
+const ShopPage = async ({ params }) => {
   const supabase = createClient();
+  const { username } = params;
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: session } = await supabase.auth.getSession();
+  const user = session;
 
-  if (!user) {
-    console.log('test')
-    return redirect("/sign-in");
-  }
-
-  const shopName = user.email.split('@')[0];
-
-  // Check if shop exists, if not create one
+  // Fetch the shop by the username (from shops table)
   const { data: shop, error } = await supabase
-    .from('shops')
-    .select()
-    .eq('name', shopName)
+    .from("shops")
+    .select("*")
+    .eq("name", username)
     .single();
 
-  if (error) {
-    // Shop doesn't exist, create one
-    await supabase.from('shops').insert({ name: shopName });
+  if (error || !shop) {
+    console.log("haha");
+    notFound();
   }
+  const sbuser = await supabase.auth.getUser()
 
+  // Determine if logged-in user is the admin
+  const isAdmin =
+    user.session && sbuser?.data?.user?.email?.split("@")[0] === shop.name;
+
+
+  // Render either the admin panel or the public shop view
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <h1 className="text-2xl font-bold mb-4">Welcome, {user.email}</h1>
-        
-        {/* <ClientSideDashboard shopName={shopName} userEmail={user.email} /> */}
-      </div>
+    <div>
+      <h1>Welcome to {shop.name}'s Shop</h1>
+      {isAdmin ? (
+        <Admin shop_name={shop.name}  />
+        // <h1> fuck </h1>
+      ) : (
+        <ClientOrderView shop_name={shop.name} />
+      )}
     </div>
   );
-}
+};
+
+export default ShopPage;
