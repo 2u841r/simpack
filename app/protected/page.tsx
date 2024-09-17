@@ -384,6 +384,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import ClientSideDashboard from "@/components/ClientSideDashboard";
+import Link from "next/link";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -413,7 +414,7 @@ export default async function ProtectedPage() {
     <div className="flex-1 w-full flex flex-col gap-12">
       <div className="w-full">
         <h1 className="text-2xl font-bold mb-4">Welcome, {user.email}</h1>
-        
+          <Link className="bg-green-500 p-2 m-4 text-3xl" href={user.email.split("@")[0]}> go to your page </Link>
         {/* <ClientSideDashboard shopName={shopName} userEmail={user.email} /> */}
       </div>
     </div>

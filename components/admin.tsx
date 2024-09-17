@@ -147,7 +147,7 @@ const Admin = ({ shop_name }) => {
       console.log("Package updated successfully:", data);
 
       // // Refresh the list of packages after the update (if needed)
-       fetchData();
+      fetchData();
 
       // Close modal after submit
       handleCloseModal();
@@ -190,6 +190,67 @@ const Admin = ({ shop_name }) => {
           <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
             Admin Panel
           </h1>
+
+          <div className="min-h-screen bg-gray-100 py-6 flex flex-col items-center">
+            <div className="w-full max-w-2xl">
+              <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+                Orders
+              </h2>
+
+              {orders.length > 0 ? (
+                <ul className="space-y-6">
+                  {orders.map((order) => (
+                    <li
+                      key={order.id}
+                      className={`p-6 rounded-lg shadow-lg ${
+                        order.completed
+                          ? "bg-green-100 border-green-500"
+                          : "bg-orange-100 border-orange-500"
+                      } border-2`}
+                    >
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <div className="mb-4 sm:mb-0">
+                          <h3 className="text-lg font-semibold text-gray-800">
+                            {order.packages.gb}GB + {order.packages.minutes}{" "}
+                            Minutes
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Price: {order.packages.price} TK
+                          </p>
+                          <p className="text-gray-600">
+                            Mobile: {order.mobile_number} - Payment:{" "}
+                            {order.payment_method}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Transaction ID: {order.transaction_id}
+                          </p>
+                        </div>
+
+                        {!order.completed && (
+                          <button
+                            onClick={() => handleCompleteOrder(order.id)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+                          >
+                            Complete
+                          </button>
+                        )}
+
+                        {order.completed && (
+                          <span className="text-green-700 font-bold">
+                            Completed
+                          </span>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-center text-gray-500">No orders found.</p>
+              )}
+            </div>
+          </div>
+
+
 
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
             Create New Package
@@ -411,64 +472,6 @@ const Admin = ({ shop_name }) => {
           </div>
         </div>
       )}
-
-      <div className="min-h-screen bg-gray-100 py-6 flex flex-col items-center">
-        <div className="w-full max-w-2xl">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-            Orders
-          </h2>
-
-          {orders.length > 0 ? (
-            <ul className="space-y-6">
-              {orders.map((order) => (
-                <li
-                  key={order.id}
-                  className={`p-6 rounded-lg shadow-lg ${
-                    order.completed
-                      ? "bg-green-100 border-green-500"
-                      : "bg-orange-100 border-orange-500"
-                  } border-2`}
-                >
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                    <div className="mb-4 sm:mb-0">
-                      <h3 className="text-lg font-semibold text-gray-800">
-                        {order.packages.gb}GB + {order.packages.minutes} Minutes
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Price: {order.packages.price} TK
-                      </p>
-                      <p className="text-gray-600">
-                        Mobile: {order.mobile_number} - Payment:{" "}
-                        {order.payment_method}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Transaction ID: {order.transaction_id}
-                      </p>
-                    </div>
-
-                    {!order.completed && (
-                      <button
-                        onClick={() => handleCompleteOrder(order.id)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-                      >
-                        Complete
-                      </button>
-                    )}
-
-                    {order.completed && (
-                      <span className="text-green-700 font-bold">
-                        Completed
-                      </span>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-center text-gray-500">No orders found.</p>
-          )}
-        </div>
-      </div>
     </div>
   );
 };
