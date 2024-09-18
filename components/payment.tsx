@@ -76,7 +76,7 @@ const Payment = ({ shopName }: { shopName: string }) => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-6 shadow-md">
       <h2 className="text-lg text-black font-bold mb-4">Payment Methods for {shopName}</h2>
 
       {isEditing ? (

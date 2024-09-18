@@ -63,7 +63,7 @@ const ClientOrderView = ({ shop_name }) => {
         </h1>
         <ul className="space-y-4">
           {packages.map((pkg) => (
-            <li key={pkg.id} className="bg-white rounded-lg shadow-md p-4">
+            <li key={pkg.id} className="bg-white rounded-lg shadow-md m-6 p-4">
               <div className="flex flex-col sm:flex-row justify-between items-center">
                 <div className="text-center sm:text-left">
                   <h2 className="text-lg font-semibold text-gray-700">

@@ -49,7 +49,11 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  return redirect("/protected");
+  const { data: { user } } = await supabase.auth.getUser();
+  const username = user.email.split("@")[0]; 
+  // return NextResponse.redirect(new URL(`/${username}`, request.url));
+  // const url = new URL(`/${username}`);  
+  return redirect(`/${username}`);
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
