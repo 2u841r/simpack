@@ -31,7 +31,7 @@ const ShopPage = async ({ params }) => {
   // Render either the admin panel or the public shop view
   return (
     <div>
-      <h1>Welcome to {shop.name}'s Shop</h1>
+      <h1 className="text-center">Welcome to <span className="font-bold"> {shop.name} </span>'s Shop</h1>
       {isAdmin ? (
         <Admin shop_name={shop.name}  />
         // <h1> test </h1>
