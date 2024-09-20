@@ -3,6 +3,13 @@ import React, { useState, useEffect } from "react";
 const AdminCurrentPacks = ({ packages, supabase, fetchData }) => {
   const [user, setUser] = useState<any>(null);
 
+  const operatorColors = {
+    GP: "text-[#19AAF8]",
+    BL: "text-[#F16522]",
+    Robi: "text-[#D91D24]",
+    Airtel: "text-[#ED1C24]",
+  };
+
   // Fetch user session
   useEffect(() => {
     const fetchUser = async () => {
@@ -40,6 +47,7 @@ const AdminCurrentPacks = ({ packages, supabase, fetchData }) => {
       const { data, error } = await supabase
         .from("packages")
         .update({
+          operator: selectedPackage.operator,
           gb: selectedPackage.gb,
           minutes: selectedPackage.minutes,
           validity: selectedPackage.validity,
@@ -93,6 +101,11 @@ const AdminCurrentPacks = ({ packages, supabase, fetchData }) => {
               >
                 <div className="text-center sm:text-left mb-4 sm:mb-0">
                   <h3 className="text-lg font-semibold text-gray-700">
+                    <span
+                      className={`${operatorColors[pkg.operator] || "text-black"}`}
+                    >
+                      {pkg.operator}
+                    </span>{" "}
                     {pkg.gb} GB + {pkg.minutes} Minutes
                   </h3>
                   <p className="text-sm text-gray-500">
@@ -151,6 +164,24 @@ const AdminCurrentPacks = ({ packages, supabase, fetchData }) => {
 
             {/* Edit form */}
             <div className="space-y-4">
+              <label htmlFor="operator" className="text-black text-xl">
+                Choose a Operator:{" "}
+              </label>
+              <select
+                name="operator"
+                id="operator"
+                value={selectedPackage.operator}
+                onChange={(e) =>
+                  setSelectedPackage({ ...selectedPackage, operator: e.target.value })
+                }
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="GP">GP</option>
+                <option value="BL">BL</option>
+                <option value="Robi">Robi</option>
+                <option value="Airtel">Airtel</option>
+              </select>
+
               <input
                 type="number"
                 value={selectedPackage?.gb}

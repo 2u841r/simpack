@@ -10,6 +10,13 @@ const ClientOrderView = ({ shop_name }) => {
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const operatorColors = {
+    GP: "text-[#19AAF8]",
+    BL: "text-[#F16522]",
+    Robi: "text-[#D91D24]",
+    Airtel: "text-[#ED1C24]",
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const supabase = createClient();
@@ -73,6 +80,11 @@ const ClientOrderView = ({ shop_name }) => {
               <div className="flex flex-col sm:flex-row justify-between items-center">
                 <div className="text-center sm:text-left">
                   <h2 className="text-lg font-semibold text-gray-700">
+                    <span
+                      className={`${operatorColors[pkg.operator] || "text-black"}`} 
+                    >
+                      {pkg.operator}
+                    </span>{" "}
                     {pkg.gb}GB + {pkg.minutes} Minutes
                   </h2>
                   <p className="text-gray-500">Validity: {pkg.validity} days</p>

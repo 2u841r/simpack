@@ -10,6 +10,7 @@ import AdminCurrentPacks from "./AdminCurrentPacks";
 // Define the type for a package
 interface Package {
   id: number;
+  operator: string; 
   gb: number;
   minutes: number;
   validity: number;
@@ -28,6 +29,7 @@ const Admin = ({ shop_name }) => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [newPackage, setNewPackage] = useState({
+    operator: "",
     gb: "",
     minutes: "",
     validity: "",
@@ -82,6 +84,7 @@ const Admin = ({ shop_name }) => {
     const { data, error } = await supabase.from("packages").insert([
       {
         shop_name: username,
+        operator: newPackage.operator,
         gb: newPackage.gb,
         minutes: newPackage.minutes,
         validity: newPackage.validity,
@@ -94,7 +97,14 @@ const Admin = ({ shop_name }) => {
       console.error(error.message);
     } else {
       fetchData();
-      setNewPackage({ gb: "", minutes: "", validity: "", price: "", note: "" });
+      setNewPackage({
+        operator: "",
+        gb: "",
+        minutes: "",
+        validity: "",
+        price: "",
+        note: "",
+      });
     }
   };
 

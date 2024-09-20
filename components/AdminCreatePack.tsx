@@ -3,18 +3,20 @@ import { useState } from "react";
 
 const AdminCreatePack = ({ fetchData, supabase, username }) => {
   const [newPackage, setNewPackage] = useState({
+    operator: "",
     gb: "",
     minutes: "",
     validity: "",
     price: "",
     note: "",
   });
-
+ 
   // Create new package
   const handleCreatePackage = async () => {
     const { data, error } = await supabase.from("packages").insert([
       {
         shop_name: username,
+        operator: newPackage.operator,
         gb: newPackage.gb,
         minutes: newPackage.minutes,
         validity: newPackage.validity,
@@ -27,7 +29,7 @@ const AdminCreatePack = ({ fetchData, supabase, username }) => {
       console.error(error.message);
     } else {
       fetchData();
-      setNewPackage({ gb: "", minutes: "", validity: "", price: "", note: "" });
+      setNewPackage({operator: "",  gb: "", minutes: "", validity: "", price: "", note: "" });
     }
   };
   return (
@@ -36,6 +38,21 @@ const AdminCreatePack = ({ fetchData, supabase, username }) => {
         Create New Package
       </h2>
       <div className="space-y-4">
+        <label htmlFor="operator" className="text-black text-xl">
+          Choose a Operator:{" "}
+        </label>
+        <select
+          name="operator"
+          id="operator"
+          onChange={(e) => setNewPackage({ ...newPackage, operator: e.target.value })}
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="GP">GP</option>
+          <option value="BL">BL</option>
+          <option value="Robi">Robi</option>
+          <option value="Airtel">Airtel</option>
+        </select>
+
         <input
           type="number"
           placeholder="GB"
