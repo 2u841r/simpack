@@ -7,7 +7,7 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
   const [transactionId, setTransactionId] = useState("");
   const [paymentMobile, setPaymentMobile] = useState("");
   const [orderTime] = useState(new Date().toISOString());
-  const [orderSubmitted, setOrderSubmitted] = useState(false); 
+  const [orderSubmitted, setOrderSubmitted] = useState(false);
   const [availablePaymentMethods, setAvailablePaymentMethods] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +25,7 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
       if (error) {
         console.error("Error fetching payment methods:", error.message);
       } else if (data) {
-        setAvailablePaymentMethods(data);  // Save the fetched payment methods
+        setAvailablePaymentMethods(data); // Save the fetched payment methods
       }
 
       setLoading(false);
@@ -40,6 +40,11 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
   };
 
   const handleSubmit = async (e) => {
+    if (mobileNumber.length !== 11) {
+      alert("Wrong mobile number");
+      e.preventDefault();
+      return
+    }
     e.preventDefault();
 
     const supabase = createClient();
@@ -60,7 +65,7 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
       console.error("Error:", error.message);
     } else {
       console.log("Order placed:", data);
-      setOrderSubmitted(true); 
+      setOrderSubmitted(true);
     }
   };
 
@@ -89,7 +94,7 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
                 <div className="mb-4">
                   <label className="block text-gray-700">Mobile Number</label>
                   <input
-                    type="text"
+                    type="number"
                     value={mobileNumber}
                     onChange={(e) => setMobileNumber(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded w-full"
@@ -111,6 +116,7 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
                           checked={paymentMethod === method}
                           onChange={(e) => setPaymentMethod(e.target.value)}
                           className="form-radio"
+                          minLength={11}
                         />
                         <span className="text-black ml-2">
                           {method.charAt(0).toUpperCase() + method.slice(1)}
@@ -146,9 +152,7 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
                 )}
 
                 <div className="mb-4">
-                  <label className="block text-gray-700">
-                    Transaction ID
-                  </label>
+                  <label className="block text-gray-700">Transaction ID</label>
                   <input
                     type="text"
                     value={transactionId}
@@ -162,7 +166,7 @@ const OrderForm = ({ packageId, shopName, closePopup }) => {
                     Payment Method Mobile Number
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     value={paymentMobile}
                     onChange={(e) => setPaymentMobile(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded w-full"

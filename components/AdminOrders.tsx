@@ -2,7 +2,7 @@
 import React from "react";
 
 const AdminOrders = ({ orders, handleCancelOrder, handleCompleteOrder }) => {
-  console.log(orders);
+  // console.log(orders);
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col items-center">
       <div className="w-full max-w-2xl">
