@@ -13,6 +13,11 @@ const AdminCreatePack = ({ fetchData, supabase, username }) => {
  
   // Create new package
   const handleCreatePackage = async () => {
+    if (newPackage.operator === ""){
+      alert('please select a operator')
+      return
+    } 
+    
     const { data, error } = await supabase.from("packages").insert([
       {
         shop_name: username,
@@ -47,6 +52,7 @@ const AdminCreatePack = ({ fetchData, supabase, username }) => {
           onChange={(e) => setNewPackage({ ...newPackage, operator: e.target.value })}
           className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
+          <option value="">--- Please select ---</option>
           <option value="GP">GP</option>
           <option value="BL">BL</option>
           <option value="Robi">Robi</option>

@@ -29,14 +29,8 @@ const Admin = ({ shop_name }) => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [newPackage, setNewPackage] = useState({
-    operator: "",
-    gb: "",
-    minutes: "",
-    validity: "",
-    price: "",
-    note: "",
+    operator: "", gb: "", minutes: "", validity: "", price: "", note: "",
   });
-
   // Fetch packages and orders
   const fetchData = async () => {
     const { data: packagesData, error: packagesError } = await supabase
@@ -60,9 +54,10 @@ const Admin = ({ shop_name }) => {
       payment_method,
       transaction_id,
       completed,
+      cancelled,
       package_id,
       order_time,
-      packages ( gb, minutes, price )
+      packages ( gb, minutes, price, operator )
     `
       )
       .eq("shop_name", username);
@@ -79,34 +74,7 @@ const Admin = ({ shop_name }) => {
     fetchData();
   }, [username]);
 
-  // Create new package
-  const handleCreatePackage = async () => {
-    const { data, error } = await supabase.from("packages").insert([
-      {
-        shop_name: username,
-        operator: newPackage.operator,
-        gb: newPackage.gb,
-        minutes: newPackage.minutes,
-        validity: newPackage.validity,
-        price: newPackage.price,
-        note: newPackage.note,
-      },
-    ]);
-
-    if (error) {
-      console.error(error.message);
-    } else {
-      fetchData();
-      setNewPackage({
-        operator: "",
-        gb: "",
-        minutes: "",
-        validity: "",
-        price: "",
-        note: "",
-      });
-    }
-  };
+ 
 
   const handleCompleteOrder = async (orderId: number) => {
     const note = prompt("Enter a note (optional):");
@@ -114,6 +82,22 @@ const Admin = ({ shop_name }) => {
     const { error } = await supabase
       .from("orders")
       .update({ completed: true, note })
+      .eq("id", orderId);
+
+    if (error) {
+      console.error("Error updating order:", error.message);
+    } else {
+      // Optionally, fetch updated orders data or update state directly
+      fetchData();
+    }
+  };
+
+  const handleCancelOrder = async (orderId: number) => {
+    const note = prompt("Enter a note (optional):");
+
+    const { error } = await supabase
+      .from("orders")
+      .update({ cancelled: true, note })
       .eq("id", orderId);
 
     if (error) {
@@ -135,6 +119,7 @@ const Admin = ({ shop_name }) => {
           <AdminOrders
             orders={orders}
             handleCompleteOrder={handleCompleteOrder}
+            handleCancelOrder={handleCancelOrder}
           />
           // Create pack
           <AdminCreatePack
